@@ -12,10 +12,8 @@ const Login = () => {
  function auth(e){  
     e.preventDefault();
 
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
     const forms = document.getElementById('form')
   
-    // Loop over them and prevent submission
   
         if (!forms.checkValidity()) {
          // e.preventDefault()
@@ -59,7 +57,8 @@ return
   }
   return (<div>
     <Header/>
-      <main style={{minHeight: "70vh"}}>
+    <main style={{ minHeight: "70vh" }}>
+  <div className="container bd-gutter flex-wrap flex-lg-nowrap">
     <h2 className="text-center text-black bg-warning m-2">Аутентификация</h2>
     <div className="p-3">
         <form className="w-50 g-3 m-auto border p-3 needs-validation" style={{minWidth: "300px"}} onSubmit={auth} noValidate id='form'>
@@ -86,7 +85,7 @@ return
     </div>
 
    
-    
+    </div>
     </main>
 </div>) 
   

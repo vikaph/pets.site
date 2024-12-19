@@ -1,21 +1,84 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import CardsList from "../components/CardsList";
 
 const Profile = () => {
-    
+  const [card, setCard] = useState({ data: { orders: [] } });
   let [user, setUser]=useState({name: "", id: "", registrationDate: "", phone: ""});  
+
+  useEffect(() => {
+    let myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer "+localStorage.token);
+    myHeaders.append("Content-Type", "application/json");
   
-  let myHeaders = new Headers();
-  myHeaders.append("Authorization", "Bearer "+localStorage.token);
-  myHeaders.append("Content-Type", "application/json");
-  let requestOptions = {
-      method: 'GET',
-      headers: myHeaders //+body если существует
-  };
-  fetch("http://pets.сделай.site/api/users", requestOptions)
-      .then(response=>response.json())
-      .then(response=>setUser(response))
+    fetch("http://pets.сделай.site/api/users", {
+        method: 'GET',
+        headers: myHeaders
+    })
+    .then(response => response.json())
+    .then(response => setUser(response));
+  }, []);
+
+
+
+  function updateEmail(e) {
+    e.preventDefault();
+
+    const newEmail = document.getElementById('exampleInputEmail1');
+    const data = JSON.stringify({"email" : newEmail.value});
+
+    let myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer "+localStorage.token);
+    myHeaders.append("Content-Type", "application/json");
+
+    let requestOptions = {
+        method: 'PATCH',
+        headers: myHeaders,
+        body: data,
+    };
+
+    fetch("http://pets.сделай.site/api/users/email", requestOptions)
+      .then(response => response.status)
+      .then(result=>{ 
+        debugger;       
+        if (result === 200) {
+            document.location.reload();
+        }
+        else
+        {            
+            console.log("Не удалось изменить email");
+        }});      
+  }
+
+
+  function updatePhone(e) {
+    e.preventDefault();
+
+    const newPhone = document.getElementById('update-phone1');
+    const data = JSON.stringify({"phone" : newPhone.value});
+
+    let myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer "+localStorage.token);
+    myHeaders.append("Content-Type", "application/json");
+
+    let requestOptions = {
+        method: 'PATCH',
+        headers: myHeaders,
+        body: data,
+    };
+
+    fetch("http://pets.сделай.site/api/users/phone", requestOptions)
+      .then(response => response.status)
+      .then(result=>{      
+        if (result === 200) {
+            document.location.reload();
+        }
+        else
+        {            
+            console.log("Не удалось изменить номер телефона");
+        }});      
+  }
 
     return (
         <div>
@@ -94,10 +157,12 @@ const Profile = () => {
           </p>
         </div>
       </div>
+
+
       <h2 className="text-center text-black bg-warning m-2">
         Изменить адрес электронной почты
       </h2>
-      <form className="w-50 m-auto p-3" style={{ minWidth: 300 }}>
+      <form id="update-email-form" onSubmit={updateEmail} className="w-50 m-auto p-3" style={{ minWidth: 300 }}>
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Введите адрес электронной почты
@@ -106,7 +171,7 @@ const Profile = () => {
             type="email"
             className="form-control"
             id="exampleInputEmail1"
-            aria-describedby="emailHelp"
+            aria-describedby="emailHelp"            
           />
           <div className="form-text">
             Мы никогда не делимся вашими контактами.
@@ -116,18 +181,20 @@ const Profile = () => {
           Отправить
         </button>
       </form>
+
+
       <h2 className="text-center text-black bg-warning m-2">
         Изменить номер телефона
       </h2>
-      <form className="w-50 m-auto p-3" style={{ minWidth: 300 }}>
+      <form  id="update-phone" onSubmit={updatePhone} className="w-50 m-auto p-3" style={{ minWidth: 300 }}>
         <div className="mb-3">
-          <label htmlFor="phone" className="form-label">
+          <label htmlFor="update-phone1" className="form-label">
             Введите номер телефона
           </label>
           <input
             type="tel"
             className="form-control"
-            id="phone"
+            id="update-phone1"
             aria-describedby="emailHelp"
           />
           <div className="form-text">Используйте цифры, +, -.</div>
@@ -141,35 +208,7 @@ const Profile = () => {
       </h2>
       <br />
 
-      <nav aria-label="Page navigation example" className="m-3">
-        <ul className="pagination">
-          <li className="page-item">
-            <a className="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">«</span>
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              1
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              2
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              3
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#" aria-label="Next">
-              <span aria-hidden="true">»</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <CardsList data={card.data.orders} itemsPerPage={6}/>
     </div>
   </main>
   <br />

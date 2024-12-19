@@ -7,8 +7,8 @@ import Footer from '../components/Footer';
 
 
 const Registration = () => {
+
         let [user, setUser] = useState();
-    
         let blocks = useRef();
     
         function sign(e) {
@@ -60,7 +60,9 @@ const Registration = () => {
     
         return (<div>
           <Header/>
-          <h2 className="text-center text-black bg-warning m-2">Регистрация</h2>
+          <main style={{ minHeight: "70vh" }}>
+  <div className="container bd-gutter flex-wrap flex-lg-nowrap">
+          <h2 className="text-center text-black bg-warning m-2">Аутентификация</h2>
             <div style={{ "minHeight": "70vh" }}>
                 <form className="w-50 m-auto p-5 needs-validation" style={{ "min-width": "300px" }} noValidate onSubmit={sign} id='forma'>
                     <div className="mb-3">
@@ -91,11 +93,14 @@ const Registration = () => {
                         <label className="form-check-label" htmlFor="validationFormCheck1">Согласие на обработку персональных данных</label>
                         <div className="invalid-feedback">Обязательное поле</div>
                     </div>
-                    <button type="submit" className="btn bg-danger bg-opacity-25">Зарегистрироваться</button>
+                    <button type="submit" className="btn color text-white">Зарегистрироваться</button>
                 </form>
                 <div className="alert alert-danger w-50 asda m-auto" style={{ "display": "none" }} role="alert" ref={blocks}></div>
             </div>
             <br/>
+            </div>
+            </main>
+         
             <Footer/>
             </div>
         );

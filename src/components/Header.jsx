@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from "../image/logo.png";
 import {Link} from "react-router-dom";
+import Search2 from "./Search2";
 
 
 const Header = () => { 
@@ -48,7 +49,9 @@ const Header = () => {
           <Link className="nav-link" to={'/search'}>Поиск по объявлениям</Link>
           </li>
         </ul>
-        <form className="d-flex">
+
+        <Search2/>
+        {/* <form className="d-flex">
           <input
             className="form-control me-2"
             type="search"
@@ -66,7 +69,7 @@ const Header = () => {
             <option value="Крокодил"></option>
             <option value="Сова"></option>
           </datalist>
-        </form>
+        </form> */}
       </div>
     </div>
   </nav>
