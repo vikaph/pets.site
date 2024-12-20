@@ -1,10 +1,10 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import React, { useEffect, useState } from 'react';
-import CardsList from "../components/CardsList";
+import ProfileCard from '../components/Cards2';
 
 const Profile = () => {
-  const [card, setCard] = useState({ data: { orders: [] } });
+  const [orders, setOrders] = useState([]);  
   let [user, setUser]=useState({name: "", id: "", registrationDate: "", phone: ""});  
 
   useEffect(() => {
@@ -79,6 +79,41 @@ const Profile = () => {
             console.log("Не удалось изменить номер телефона");
         }});      
   }
+
+
+
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem('token'));
+
+  useEffect(() => {
+    req_user();
+}, []);  
+
+async function req_user() {
+    const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+    };
+
+    try {
+        const response = await fetch("https://pets.xn--80ahdri7a.site/api/users/orders", requestOptions);
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        
+        const result = await response.json();
+      
+        if (result && result.data && Array.isArray(result.data.orders)) {
+            setOrders(result.data.orders); 
+        }
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+     
+    }
+}
+
 
     return (
         <div>
@@ -207,8 +242,18 @@ const Profile = () => {
         Добавленные объявления
       </h2>
       <br />
-
-      <CardsList data={card.data.orders} itemsPerPage={6}/>
+      <div
+                    className="d-flex flex-row"
+                    style={{ paddingLeft: "11%", paddingRight: "11%" }}
+                >
+                    {orders.length > 0 ? (
+                        orders.map((order, index) => (
+                            <ProfileCard key={order.id || index} data={order} />
+                        ))
+                    ) : (
+                        <p className='text-center'>Нет добавленных объявлений.</p>
+                    )}
+                </div>
     </div>
   </main>
   <br />
